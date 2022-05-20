@@ -1,8 +1,10 @@
-package com.team7.nar;
+package com.team7.nar.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.team7.nar.R;
 
 public class MainActivity extends AppCompatActivity {
 
