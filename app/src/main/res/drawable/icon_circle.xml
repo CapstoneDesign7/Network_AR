@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/battery_charging.xml -->
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="185dp"
+    android:height="203dp"
+    android:viewportWidth="185"
+    android:viewportHeight="203"
+    >
+
+    <group>
+
+        <clip-path
+            android:pathData="M92.5 0C143.586 0 185 41.4137 185 92.5V110.5C185 161.586 143.586 203 92.5 203C41.4137 203 0 161.586 0 110.5V92.5C0 41.4137 41.4137 0 92.5 0Z"
+            />
+
+        <path
+            android:pathData="M0 0V203H185V0"
+            android:fillColor="#F35B5B"
+            />
+
+    </group>
+
+</vector>
