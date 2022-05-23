@@ -18,8 +18,8 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemview = inflater.inflate(R.layout.wifi_item,parent,false);
-        return new ViewHolder(itemview);
+        View itemView = inflater.inflate(R.layout.wifi_item,parent,false);
+        return new ViewHolder(itemView);
     }
 
     @Override
@@ -37,12 +37,12 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
         TextView wifiName;
         TextView wifiSignal;
         TextView wifiSpeed;
-        public ViewHolder(View itemview){
-            super(itemview);
+        public ViewHolder(View itemView){
+            super(itemView);
 
-            wifiName = itemview.findViewById(R.id.wifi_name);
-            wifiSignal = itemview.findViewById(R.id.wifi_signal);
-            wifiSpeed= itemview.findViewById(R.id.wifi_speed);
+            wifiName = itemView.findViewById(R.id.wifi_name);
+            wifiSignal = itemView.findViewById(R.id.wifi_signal);
+            wifiSpeed= itemView.findViewById(R.id.wifi_speed);
         }
 
         public void setItem(WiFi wifi){
