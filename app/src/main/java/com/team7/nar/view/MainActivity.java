@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.team7.nar.R;
 
 public class MainActivity extends AppCompatActivity {
+    DisconnectedFragment disconnectedFragment;
+    ConnectedFragment connectedFragment;
 
     String[] permission_list = {
             Manifest.permission.CAMERA,
@@ -22,9 +26,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Junyoung
-        // Injae
         onCheckPermission();
+
+        changeFragment();
+    }
+
+    public void changeFragment(){
+//        disconnectedFragment = new DisconnectedFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
+//
+        connectedFragment = new ConnectedFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, connectedFragment).commit();
     }
 
     private void onCheckPermission() {
