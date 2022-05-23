@@ -5,16 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 
 import com.team7.nar.R;
 
 public class MainActivity extends AppCompatActivity {
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
+    WifiManager wifiManager;
+    WifiInfo connectionInfo;
 
     String[] permission_list = {
             Manifest.permission.CAMERA,
@@ -28,15 +34,54 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         onCheckPermission();
 
-        changeFragment();
+        tmpScanning();
     }
 
-    public void changeFragment(){
-//        disconnectedFragment = new DisconnectedFragment();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
-//
-        connectedFragment = new ConnectedFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, connectedFragment).commit();
+    public void tmpScanning(){
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        String name = "";
+
+        connectionInfo = wifiManager.getConnectionInfo();
+        String tmp = connectionInfo.getSupplicantState().toString();
+
+        int flag;
+
+        switch (tmp){
+            // Connected
+            case "COMPLETED":
+                name = connectionInfo.getSSID();
+                flag = 1;
+                changeFragment(flag, name);
+                break;
+            // Disconnected
+            case "DISCONNECTED":
+                flag = -1;
+                changeFragment(flag, name);
+                break;
+
+            // WiFi Off
+            case "UNINITIALIZED":
+                flag = 0;
+                changeFragment(flag, name);
+                break;
+        }
+    }
+
+    public void changeFragment(int flag, String name){
+        // Connected
+        if (flag == 1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("name", name);
+
+            connectedFragment = new ConnectedFragment();
+            connectedFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, connectedFragment).commit();
+        }
+        // Disconnected
+        else {
+            disconnectedFragment = new DisconnectedFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
+        }
     }
 
     private void onCheckPermission() {
