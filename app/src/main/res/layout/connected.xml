@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/connected_radius">
+    android:background="@drawable/connected_radius"
+    android:paddingHorizontal="10dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +22,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="WiFi Name"
-        android:textSize="30sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="20sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         />
