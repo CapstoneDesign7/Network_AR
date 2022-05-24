@@ -1,14 +1,24 @@
 package com.team7.nar.view;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.team7.nar.R;
+import com.team7.nar.databinding.FragmentMainBinding;
+import com.team7.nar.model.WiFi;
+import com.team7.nar.viewModel.WiFiViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,34 +26,23 @@ import com.team7.nar.R;
  * create an instance of this fragment.
  */
 public class MainFragment extends Fragment {
+    private FragmentMainBinding binding;
+    private WiFiViewModel viewModel;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    DisconnectedFragment disconnectedFragment;
+    ConnectedFragment connectedFragment;
+    WifiManager wifiManager;
+    WifiInfo connectionInfo;
 
     public MainFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +50,59 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        binding = FragmentMainBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
+        changeFragment(0,"hihi");
+        binding.scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked", "scanbutton clicked");
+                WiFi mywifi = viewModel.scan(getActivity().getApplicationContext());
+                if (mywifi == null){
+                    changeFragment(0,"hihi");
+                    Log.d("clicked", "wifi is null");
+                }
+                else{
+                    changeFragment(1,mywifi.getName());
+                }
+
+            }
+        });
+    }
+
+    public void changeFragment(int flag, String name){
+        // Connected
+        if (flag == 1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("name", name);
+            connectedFragment = new ConnectedFragment();
+            connectedFragment.setArguments(bundle);
+            getParentFragmentManager().beginTransaction().replace(R.id.statusContainer, connectedFragment).commit();
+        }
+        // Disconnected
+        else {
+            disconnectedFragment = new DisconnectedFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
+        }
+    }
+
+
+
 }
