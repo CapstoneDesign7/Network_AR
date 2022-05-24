@@ -7,6 +7,16 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "wifi_list")
 public class WiFi {
+    @Override
+    public String toString() {
+        return "WiFi{" +
+                "ssid='" + ssid + '\'' +
+                ", name='" + name + '\'' +
+                ", linkSpeed=" + linkSpeed +
+                ", rssiLevel=" + rssiLevel +
+                ", time='" + time + '\'' +
+                '}';
+    }
 
     @PrimaryKey
     @NonNull

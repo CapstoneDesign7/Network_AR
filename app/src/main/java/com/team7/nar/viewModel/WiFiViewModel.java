@@ -1,18 +1,33 @@
 package com.team7.nar.viewModel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.team7.nar.model.WiFi;
 import com.team7.nar.model.WiFiDao;
 import com.team7.nar.model.WiFiRoomDatabase;
+import com.team7.nar.model.WifiScanner;
 
 import java.util.List;
 
 public class WiFiViewModel extends AndroidViewModel {
+    static WifiScanner wifiScanner = new WifiScanner();
+
+    private MutableLiveData<WiFi> currentWifi;
+    public LiveData<WiFi> getCurrentWifi() {
+        if (currentWifi == null) {
+            currentWifi = new MutableLiveData<WiFi>();
+        }
+        return currentWifi;
+    }
+    public WiFi scan(Context context){
+        return wifiScanner.scan(context);
+    }
 
     private final LiveData<List<WiFi>> mAllWiFi;
 
