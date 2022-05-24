@@ -11,7 +11,7 @@
         android:text="Disconnected"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:background="#4D020002"
+        android:background="@drawable/disconnected_radius"
         android:gravity="center"
         />
 
