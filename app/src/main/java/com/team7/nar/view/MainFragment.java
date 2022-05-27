@@ -68,6 +68,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
         changeFragment(0,"hihi");
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
