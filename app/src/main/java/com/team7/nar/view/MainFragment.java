@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.team7.nar.R;
 import com.team7.nar.databinding.FragmentMainBinding;
@@ -29,11 +31,8 @@ public class MainFragment extends Fragment {
     private FragmentMainBinding binding;
     private WiFiViewModel viewModel;
 
-
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
-    WifiManager wifiManager;
-    WifiInfo connectionInfo;
 
     public MainFragment() {
 
@@ -70,19 +69,28 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
         changeFragment(0,"hihi");
+
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked", "scanbutton clicked");
-                WiFi mywifi = viewModel.scan(getActivity().getApplicationContext());
+                Toast.makeText(getContext(), "Scan Clicked", Toast.LENGTH_SHORT).show();
+                Log.d("clicked", "Scan Button clicked");
+                WiFi mywifi = viewModel.statusCheck(getActivity().getApplicationContext());
                 if (mywifi == null){
                     changeFragment(0,"hihi");
                     Log.d("clicked", "wifi is null");
                 }
                 else{
-                    changeFragment(1,mywifi.getName());
+                    changeFragment(1, mywifi.getName());
                 }
+            }
+        });
 
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Save clicked", Toast.LENGTH_LONG).show();
+                new Thread(() -> viewModel.save()).start();
             }
         });
     }
@@ -102,7 +110,4 @@ public class MainFragment extends Fragment {
             getParentFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
         }
     }
-
-
-
 }
