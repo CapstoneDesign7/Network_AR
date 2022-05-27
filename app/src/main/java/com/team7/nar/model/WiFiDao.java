@@ -29,5 +29,4 @@ public interface WiFiDao {
     LiveData<WiFi> getWiFi(String ssid);
 
     //@Query()
-
 }

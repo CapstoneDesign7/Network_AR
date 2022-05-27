@@ -2,9 +2,12 @@ package com.team7.nar.model;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {WiFi.class}, version = 1, exportSchema = false)
 public abstract class WiFiRoomDatabase extends RoomDatabase {
@@ -30,4 +33,5 @@ public abstract class WiFiRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
 }
