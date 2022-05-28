@@ -24,9 +24,13 @@ import com.team7.nar.R;
 import com.team7.nar.databinding.ActivityMainBinding;
 import com.team7.nar.viewModel.WiFiViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     private ActivityMainBinding binding;
     private WiFiViewModel viewModel ;
+    private WifiReceiver receiver;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +42,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment =
                 (NavHostFragment) this.getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        intentFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
-        intentFilter.addAction(WifiManager.NETWORK_IDS_CHANGED_ACTION);
-        registerReceiver(new WifiReceiver(), intentFilter);
+
         Log.d("on create","on create launcehd");
     }
 
