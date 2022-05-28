@@ -66,6 +66,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                              Bundle savedInstanceState) {
         binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
         return view;
     }
 
@@ -100,6 +101,14 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewModel.recommendedWiFi.observe(getViewLifecycleOwner(),
+                        new Observer<String>() {
+                            @Override
+                            public void onChanged(String s) {
+                                recommendPopup(s);
+                            }
+                        }
+                    );
                 Log.d("clicked", "scanbutton clicked");
             }
         });
@@ -141,5 +150,17 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             disconnectedFragment = new DisconnectedFragment();
             getParentFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
         }
+    }
+    public void recommendPopup(String ssid){
+        Bundle bundle = new Bundle();
+        bundle.putString("ssid", ssid);
+
+        Log.d("Recommend", "Main Fragment 에러");
+
+        RecommendFragment e = new RecommendFragment();
+        e.setArguments(bundle);
+
+        e.show(getParentFragmentManager(), "popup");
+
     }
 }

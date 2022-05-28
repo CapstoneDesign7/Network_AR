@@ -2,6 +2,7 @@ package com.team7.nar.viewModel;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -23,10 +24,10 @@ public class WiFiViewModel extends AndroidViewModel {
     WifiManager wifiManager;
     WifiInfo connectionInfo;
     WiFi tmpWifi;
-    private boolean check = false;
     WiFiRoomDatabase db;
 
     private final LiveData<List<WiFi>> mAllWiFi;
+    public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi;
     private WiFiDao mWiFiDao;
 
@@ -56,15 +57,33 @@ public class WiFiViewModel extends AndroidViewModel {
     }
 
     public void save(){
-        if (check){
-            currentWifi = getCurrentWifi();
-            tmpWifi = currentWifi.getValue();
+        if (getCurrentWifi().getValue() != null){
+            tmpWifi = getCurrentWifi().getValue();
+
             if (tmpWifi != null) {
                 insert(tmpWifi);
             }
             else {
                 Log.d("save", "Insert but wifi is Null");
             }
+        }
+    }
+
+    public void recommend(WiFi curWifi){
+        wifiManager = (WifiManager) getApplication().getSystemService(Context.WIFI_SERVICE);
+        List<ScanResult> results = wifiManager.getScanResults();
+        String tmp_ssid = "";
+        int max_rssi = -127;
+
+        for(ScanResult scanResult : results) {
+            if (max_rssi < scanResult.level) {
+                max_rssi = scanResult.level;
+                tmp_ssid = scanResult.SSID;
+            }
+        }
+        if (max_rssi > curWifi.getRssiLevel()) {
+
+            recommendedWiFi.setValue(tmp_ssid);
         }
     }
 
