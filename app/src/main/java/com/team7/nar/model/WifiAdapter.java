@@ -1,5 +1,6 @@
 package com.team7.nar.model;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.team7.nar.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
-    ArrayList<WiFi> wifis = new ArrayList<WiFi>();
+    private Context context;
+    private List<WiFi> wifis;
+
+    public WifiAdapter(Context context, List<WiFi> wifis){
+        this.context=context;
+        this.wifis=wifis;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,9 +43,9 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView wifiName;
-        TextView wifiSignal;
-        TextView wifiSpeed;
+        public TextView wifiName;
+        public TextView wifiSignal;
+        public TextView wifiSpeed;
         public ViewHolder(View itemView){
             super(itemView);
 
@@ -47,8 +56,8 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
 
         public void setItem(WiFi wifi){
             wifiName.setText(wifi.getName());
-            wifiSignal.setText(wifi.getRssiLevel());
-            wifiSpeed.setText(wifi.getLinkSpeed());
+            wifiSignal.setText(String.valueOf(wifi.getRssiLevel()));
+            wifiSpeed.setText(String.valueOf(wifi.getLinkSpeed()));
         }
     }
 }

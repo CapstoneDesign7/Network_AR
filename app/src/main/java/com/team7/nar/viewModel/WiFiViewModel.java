@@ -17,6 +17,7 @@ import com.team7.nar.model.WiFiDao;
 import com.team7.nar.model.WiFiRoomDatabase;
 import com.team7.nar.model.WifiScanner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WiFiViewModel extends AndroidViewModel {
@@ -26,10 +27,23 @@ public class WiFiViewModel extends AndroidViewModel {
     WiFi tmpWifi;
     WiFiRoomDatabase db;
 
-    private final LiveData<List<WiFi>> mAllWiFi;
+    private MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi;
     private WiFiDao mWiFiDao;
+
+    private List<WiFi> dummuList(){
+        List<WiFi> list = new ArrayList<>();
+        list.add(new WiFi());
+        return list;
+    }
+
+    public MutableLiveData<List<WiFi>> getAllWifi(){
+        if (allWifi == null) {
+            allWifi = new  MutableLiveData<List<WiFi>> ();
+        }
+        return allWifi;
+    }
 
     public MutableLiveData<WiFi> getCurrentWifi() {
         if (currentWifi == null) {
@@ -53,7 +67,6 @@ public class WiFiViewModel extends AndroidViewModel {
         super(application);
         db = WiFiRoomDatabase.getDatabase(application);
         mWiFiDao = db.wifiDao();
-        mAllWiFi = mWiFiDao.getAll();
     }
 
     public void save(){
@@ -87,7 +100,7 @@ public class WiFiViewModel extends AndroidViewModel {
         }
     }
 
-    LiveData<List<WiFi>> getAllWiFi() { return mAllWiFi; }
+    LiveData<List<WiFi>> getAllWiFi() { return allWifi; }
 
     public void insert(WiFi wifi) { mWiFiDao.insert(wifi); }
 
