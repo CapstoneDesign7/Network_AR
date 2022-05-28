@@ -14,7 +14,7 @@ public class WifiScanner {
         return SSID;
     }
 
-    public WiFi statusCheck(Context context){
+    public WiFi getCurrentWifi(Context context){
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         String tmp = connectionInfo.getSupplicantState().toString();

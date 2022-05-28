@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -38,17 +37,15 @@ public class WiFiViewModel extends AndroidViewModel {
         return currentWifi;
     }
 
-    public WiFi statusCheck(Context context){
-        tmpWifi = wifiScanner.statusCheck(context);
+    public void setCurrentWifi(Context context){
+        tmpWifi = wifiScanner.getCurrentWifi(context);
 
         if (tmpWifi != null){
             currentWifi = getCurrentWifi();
             currentWifi.setValue(tmpWifi);
-            check = true;
         }else{
-            check = false;
+            currentWifi.setValue(null);
         }
-        return tmpWifi;
     }
 
     public WiFiViewModel(@NonNull Application application) {

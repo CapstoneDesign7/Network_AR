@@ -1,6 +1,5 @@
 package com.team7.nar.view;
 
-import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -9,13 +8,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.team7.nar.R;
@@ -45,15 +44,10 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     }
 
     @Override
-    public void wifiConnected(String value) {
-        changeFragment(1,value);
-
+    public void wifiConnected() {
+        viewModel.setCurrentWifi(this.getContext());
     }
 
-    @Override
-    public void wifiDisconnected() {
-        changeFragment(0,"disconnected");
-    }
 
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
@@ -87,12 +81,26 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
       
         changeFragment(0,"default disconnected");
+
+
+
+        viewModel.getCurrentWifi().observe(getViewLifecycleOwner(),
+                new Observer<WiFi>() {
+                    @Override
+                    public void onChanged(WiFi wiFi) {
+                        if (wiFi == null){
+                            changeFragment(0,"disconnected");
+                        }
+                        else{
+                            changeFragment(1,wiFi.getName());
+                        }
+                    }
+                }
+        );
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("clicked", "scanbutton clicked");
-                WiFi mywifi = viewModel.statusCheck(getActivity().getApplicationContext());
-
             }
         });
 
