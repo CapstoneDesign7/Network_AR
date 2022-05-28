@@ -10,9 +10,14 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.IntentFilter;
+
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +29,9 @@ import com.team7.nar.R;
 import com.team7.nar.databinding.ActivityMainBinding;
 import com.team7.nar.viewModel.WiFiViewModel;
 
-public class MainActivity extends AppCompatActivity  {
+
+
+public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private WiFiViewModel viewModel ;
     private WifiReceiver receiver;
@@ -68,16 +75,30 @@ public class MainActivity extends AppCompatActivity  {
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        int isPermission = 0;
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == 777)
         {
-            //권한을 하나라도 허용하지 않는다면 앱 종료
+            // 하나라도 허용 안된 권한이 있으면 isPermission = 1
             for(int i=0; i<grantResults.length; i++) {
                 if(grantResults[i]!=PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(),"앱 권한 설정이 필요합니다.", Toast.LENGTH_LONG).show();
-                    finish();
+                    isPermission = 1;
                 }
             }
+            // 하나라도 허용 안된 권한이 있으면 설정창으로 넘어간다
+            if(isPermission == 1){
+                Toast.makeText(getApplicationContext(),"앱 권한 설정이 필요합니다.\n권한에서 모두 허용해주세요.", Toast.LENGTH_LONG).show();
+                showDialogGuideForPermissionSettingGuide();
+                finish();
+            }
         }
+    }
+    private void showDialogGuideForPermissionSettingGuide() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
+        overridePendingTransition(0,0);
     }
 }

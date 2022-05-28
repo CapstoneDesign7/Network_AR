@@ -2,6 +2,10 @@ package com.team7.nar.viewModel;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,27 +21,54 @@ import java.util.List;
 
 public class WiFiViewModel extends AndroidViewModel {
     static WifiScanner wifiScanner = new WifiScanner();
+    WifiManager wifiManager;
+    WifiInfo connectionInfo;
+    WiFi tmpWifi;
+    private boolean check = false;
+    WiFiRoomDatabase db;
 
+    private final LiveData<List<WiFi>> mAllWiFi;
     private MutableLiveData<WiFi> currentWifi;
-    public LiveData<WiFi> getCurrentWifi() {
+    private WiFiDao mWiFiDao;
+
+    public MutableLiveData<WiFi> getCurrentWifi() {
         if (currentWifi == null) {
             currentWifi = new MutableLiveData<WiFi>();
         }
         return currentWifi;
     }
-    public WiFi scan(Context context){
-        return wifiScanner.scan(context);
+
+    public WiFi statusCheck(Context context){
+        tmpWifi = wifiScanner.statusCheck(context);
+
+        if (tmpWifi != null){
+            currentWifi = getCurrentWifi();
+            currentWifi.setValue(tmpWifi);
+            check = true;
+        }else{
+            check = false;
+        }
+        return tmpWifi;
     }
-
-    private final LiveData<List<WiFi>> mAllWiFi;
-
-    private WiFiDao mWiFiDao;
 
     public WiFiViewModel(@NonNull Application application) {
         super(application);
-        WiFiRoomDatabase db = WiFiRoomDatabase.getDatabase(application);
+        db = WiFiRoomDatabase.getDatabase(application);
         mWiFiDao = db.wifiDao();
         mAllWiFi = mWiFiDao.getAll();
+    }
+
+    public void save(){
+        if (check){
+            currentWifi = getCurrentWifi();
+            tmpWifi = currentWifi.getValue();
+            if (tmpWifi != null) {
+                insert(tmpWifi);
+            }
+            else {
+                Log.d("save", "Insert but wifi is Null");
+            }
+        }
     }
 
     LiveData<List<WiFi>> getAllWiFi() { return mAllWiFi; }
