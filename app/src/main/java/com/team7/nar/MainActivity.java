@@ -9,10 +9,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.IntentFilter;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+
 import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
@@ -30,6 +34,10 @@ import com.team7.nar.viewModel.WiFiViewModel;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private WiFiViewModel viewModel ;
+    private WifiReceiver receiver;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment =
                 (NavHostFragment) this.getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
+
+        Log.d("on create","on create launcehd");
     }
 
 

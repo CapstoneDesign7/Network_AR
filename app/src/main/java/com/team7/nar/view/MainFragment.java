@@ -1,6 +1,7 @@
 package com.team7.nar.view;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.team7.nar.R;
+import com.team7.nar.WifiBroadcastListener;
+import com.team7.nar.WifiReceiver;
 import com.team7.nar.databinding.FragmentMainBinding;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.viewModel.WiFiViewModel;
@@ -27,17 +30,30 @@ import com.team7.nar.viewModel.WiFiViewModel;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements WifiBroadcastListener {
     private FragmentMainBinding binding;
     private WiFiViewModel viewModel;
 
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
-
+    WifiManager wifiManager;
+    WifiInfo connectionInfo;
+    WifiReceiver receiver = new WifiReceiver(this);
+    
     public MainFragment() {
 
     }
 
+    @Override
+    public void wifiConnected(String value) {
+        changeFragment(1,value);
+
+    }
+
+    @Override
+    public void wifiDisconnected() {
+        changeFragment(0,"disconnected");
+    }
 
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
@@ -67,22 +83,16 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
-        changeFragment(0,"hihi");
 
+        viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
+      
+        changeFragment(0,"default disconnected");
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Scan Clicked", Toast.LENGTH_SHORT).show();
-                Log.d("clicked", "Scan Button clicked");
+                Log.d("clicked", "scanbutton clicked");
                 WiFi mywifi = viewModel.statusCheck(getActivity().getApplicationContext());
-                if (mywifi == null){
-                    changeFragment(0,"hihi");
-                    Log.d("clicked", "wifi is null");
-                }
-                else{
-                    changeFragment(1, mywifi.getName());
-                }
+
             }
         });
 
@@ -93,6 +103,20 @@ public class MainFragment extends Fragment {
                 new Thread(() -> viewModel.save()).start();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        getActivity().registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
     }
 
     public void changeFragment(int flag, String name){
