@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
+    WiFiList wifiList;
     WifiManager wifiManager;
     WifiInfo connectionInfo;
     WifiReceiver receiver = new WifiReceiver(this);
@@ -83,8 +85,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
       
         changeFragment(0,"default disconnected");
 
-
-
         viewModel.getCurrentWifi().observe(getViewLifecycleOwner(),
                 new Observer<WiFi>() {
                     @Override
@@ -98,17 +98,27 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                     }
                 }
         );
+
+        viewModel.recommendedWiFi.observe(getViewLifecycleOwner(),
+                new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        recommendPopup(s);
+                    }
+                }
+        );
+
+        binding.listButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "List clicked", Toast.LENGTH_LONG).show();
+                Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
+            }
+        });
+
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.recommendedWiFi.observe(getViewLifecycleOwner(),
-                        new Observer<String>() {
-                            @Override
-                            public void onChanged(String s) {
-                                recommendPopup(s);
-                            }
-                        }
-                    );
                 Log.d("clicked", "scanbutton clicked");
             }
         });

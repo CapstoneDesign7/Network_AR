@@ -11,9 +11,11 @@
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_mainFragment_to_placeholder"
-            app:destination="@id/placeholder"
-            app:launchSingleTop="false" />
+            android:id="@+id/action_mainFragment_to_wiFiList"
+            app:destination="@id/wiFiList" />
     </fragment>
-    <fragment android:id="@+id/placeholder" />
+    <fragment
+        android:id="@+id/wiFiList"
+        android:name="com.team7.nar.view.WiFiList"
+        android:label="WiFiList" />
 </navigation>

@@ -18,6 +18,15 @@ public class WiFi {
                 '}';
     }
 
+    public WiFi(){
+        this.ssid = "Dummy";
+        this.name = "Dummy";
+        this.linkSpeed = 127;
+        this.rssiLevel = 127;
+        this.time = "20220528";
+    }
+
+
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "ssid")
