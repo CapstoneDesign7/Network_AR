@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface WiFiDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(WiFi wifi);
 
     @Update

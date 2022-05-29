@@ -48,13 +48,16 @@ public class WifiScanner {
             avgRSSI += scanned.getRssiLevel();
             avgLinkspeed += scanned.getLinkSpeed();
         }
+        if (scannedWifis.size() > 0) {
+            avgRSSI /= scannedWifis.size();
+            avgLinkspeed /= scannedWifis.size();
 
-        avgRSSI /= scannedWifis.size();
-        avgLinkspeed /= scannedWifis.size();
+            scannedWifi.setRssiLevel(avgRSSI);
+            scannedWifi.setLinkSpeed(avgLinkspeed);
 
-        scannedWifi.setRssiLevel(avgRSSI);
-        scannedWifi.setLinkSpeed(avgLinkspeed);
-
-        return scannedWifi;
+            return scannedWifi;
+        }
+        else
+            return null;
     }
 }
