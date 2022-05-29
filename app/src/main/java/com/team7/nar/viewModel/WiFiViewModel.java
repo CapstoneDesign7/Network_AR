@@ -27,7 +27,7 @@ public class WiFiViewModel extends AndroidViewModel {
     WiFi tmpWifi;
     WiFiRoomDatabase db;
 
-    private MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
+    public MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi;
     private WiFiDao mWiFiDao;
@@ -39,9 +39,12 @@ public class WiFiViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<WiFi>> getAllWifi(){
+        allWifi.postValue(getAllWifiFromDB());
+
         if (allWifi == null) {
-            allWifi = new  MutableLiveData<List<WiFi>> ();
+            allWifi = new MutableLiveData<List<WiFi>> ();
         }
+
         return allWifi;
     }
 
@@ -100,7 +103,7 @@ public class WiFiViewModel extends AndroidViewModel {
         }
     }
 
-    LiveData<List<WiFi>> getAllWiFi() { return allWifi; }
+    List<WiFi> getAllWifiFromDB() { return mWiFiDao.getAll(); }
 
     public void insert(WiFi wifi) { mWiFiDao.insert(wifi); }
 

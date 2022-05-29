@@ -51,22 +51,22 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     }
 
 
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+        public static MainFragment newInstance(String param1, String param2) {
+            MainFragment fragment = new MainFragment();
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+            return fragment;
+        }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         return view;
@@ -112,6 +112,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "List clicked", Toast.LENGTH_LONG).show();
+                new Thread(() -> viewModel.getAllWifi()).start();
                 Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
             }
         });

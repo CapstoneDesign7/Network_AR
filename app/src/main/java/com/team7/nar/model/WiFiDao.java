@@ -23,7 +23,7 @@ public interface WiFiDao {
     void delete(WiFi wifi);
 
     @Query("SELECT * FROM wifi_list")
-    LiveData<List<WiFi>> getAll();
+    List<WiFi> getAll();
 
     @Query("SELECT * FROM wifi_list WHERE ssid = :ssid")
     LiveData<WiFi> getWiFi(String ssid);
