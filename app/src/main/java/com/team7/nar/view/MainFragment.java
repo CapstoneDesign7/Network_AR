@@ -126,6 +126,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new Thread(() -> viewModel.scan(getContext())).start();
                 Log.d("clicked", "scanbutton clicked");
             }
         });
