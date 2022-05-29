@@ -36,11 +36,8 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
-    WiFiList wifiList;
-    WifiManager wifiManager;
-    WifiInfo connectionInfo;
     WifiReceiver receiver = new WifiReceiver(this);
-    
+
     public MainFragment() {
 
     }
@@ -51,22 +48,22 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     }
 
 
-        public static MainFragment newInstance(String param1, String param2) {
-            MainFragment fragment = new MainFragment();
-            Bundle args = new Bundle();
-            fragment.setArguments(args);
-            return fragment;
-        }
+    public static MainFragment newInstance(String param1, String param2) {
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            binding = FragmentMainBinding.inflate(inflater, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         return view;
@@ -82,28 +79,37 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
-      
-        changeFragment(0,"default disconnected");
+
+        changeFragment(0, "default disconnected");
 
         viewModel.getCurrentWifi().observe(getViewLifecycleOwner(),
                 new Observer<WiFi>() {
                     @Override
                     public void onChanged(WiFi wiFi) {
-                        if (wiFi == null){
-                            changeFragment(0,"disconnected");
-                        }
-                        else{
-                            changeFragment(1,wiFi.getName());
+                        if (wiFi == null) {
+                            changeFragment(0, "disconnected");
+                        } else {
+                            changeFragment(1, wiFi.getName());
                         }
                     }
                 }
         );
 
-        viewModel.recommendedWiFi.observe(getViewLifecycleOwner(),
+        viewModel.getRecommendedWifi().observe(getViewLifecycleOwner(),
                 new Observer<String>() {
                     @Override
                     public void onChanged(String s) {
                         recommendPopup(s);
+                    }
+                }
+        );
+
+        viewModel.getScanResultWifi().observe(getViewLifecycleOwner(),
+                new Observer<WiFi>() {
+                    @Override
+                    public void onChanged(WiFi wiFi) {
+                        viewModel.setRecommend(wiFi);
+                        // Temp fragment add
                     }
                 }
         );
@@ -147,7 +153,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
         getActivity().unregisterReceiver(receiver);
     }
 
-    public void changeFragment(int flag, String name){
+    public void changeFragment(int flag, String name) {
         // Connected
         if (flag == 1) {
             Bundle bundle = new Bundle();
@@ -162,7 +168,8 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             getParentFragmentManager().beginTransaction().replace(R.id.statusContainer, disconnectedFragment).commit();
         }
     }
-    public void recommendPopup(String ssid){
+
+    public void recommendPopup(String ssid) {
         Bundle bundle = new Bundle();
         bundle.putString("ssid", ssid);
 

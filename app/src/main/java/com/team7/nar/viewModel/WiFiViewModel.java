@@ -23,13 +23,13 @@ import java.util.List;
 public class WiFiViewModel extends AndroidViewModel {
     static WifiScanner wifiScanner = new WifiScanner();
     WifiManager wifiManager;
-    WifiInfo connectionInfo;
     WiFi tmpWifi;
     WiFiRoomDatabase db;
 
     public MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
-    private MutableLiveData<WiFi> currentWifi;
+    private MutableLiveData<WiFi> currentWifi; // Current WiFi ssid
+    private MutableLiveData<WiFi> scanResultWifi;  // Current WiFi for Scan
     private WiFiDao mWiFiDao;
 
     private List<WiFi> dummuList(){
@@ -44,7 +44,6 @@ public class WiFiViewModel extends AndroidViewModel {
         if (allWifi == null) {
             allWifi = new MutableLiveData<List<WiFi>> ();
         }
-
         return allWifi;
     }
 
@@ -66,26 +65,21 @@ public class WiFiViewModel extends AndroidViewModel {
         }
     }
 
-    public WiFiViewModel(@NonNull Application application) {
-        super(application);
-        db = WiFiRoomDatabase.getDatabase(application);
-        mWiFiDao = db.wifiDao();
-    }
-
-    public void save(){
-        if (getCurrentWifi().getValue() != null){
-            tmpWifi = getCurrentWifi().getValue();
-
-            if (tmpWifi != null) {
-                insert(tmpWifi);
-            }
-            else {
-                Log.d("save", "Insert but wifi is Null");
-            }
+    public MutableLiveData<String> getRecommendedWifi() {
+        if (recommendedWiFi == null){
+            recommendedWiFi = new MutableLiveData<>();
         }
+        return recommendedWiFi;
     }
 
-    public void recommend(WiFi curWifi){
+    public MutableLiveData<WiFi> getScanResultWifi(){
+        if (scanResultWifi == null){
+            scanResultWifi = new MutableLiveData<>();
+        }
+        return scanResultWifi;
+    }
+
+    public void setRecommend(WiFi curWifi){
         wifiManager = (WifiManager) getApplication().getSystemService(Context.WIFI_SERVICE);
         List<ScanResult> results = wifiManager.getScanResults();
         String tmp_ssid = "";
@@ -100,6 +94,32 @@ public class WiFiViewModel extends AndroidViewModel {
         if (max_rssi > curWifi.getRssiLevel()) {
 
             recommendedWiFi.setValue(tmp_ssid);
+        }
+    }
+
+    public WiFiViewModel(@NonNull Application application) {
+        super(application);
+        db = WiFiRoomDatabase.getDatabase(application);
+        mWiFiDao = db.wifiDao();
+    }
+
+    public void scan(Context context){
+        WiFi avgWifi = new WiFi();
+        avgWifi = wifiScanner.scan(context);
+
+        scanResultWifi.postValue(avgWifi);
+    }
+
+    public void save(){
+        if (getCurrentWifi().getValue() != null){
+            tmpWifi = getCurrentWifi().getValue();
+
+            if (tmpWifi != null) {
+                insert(tmpWifi);
+            }
+            else {
+                Log.d("save", "Insert but wifi is Null");
+            }
         }
     }
 
