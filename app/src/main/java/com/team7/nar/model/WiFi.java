@@ -26,7 +26,6 @@ public class WiFi {
         this.time = "20220528";
     }
 
-
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "ssid")

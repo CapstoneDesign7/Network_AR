@@ -35,6 +35,8 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WiFi wifi = wifis.get(position);
         holder.setItem(wifi);
+
+        //holder.card.
     }
 
     @Override
@@ -46,12 +48,16 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
         public TextView wifiName;
         public TextView wifiSignal;
         public TextView wifiSpeed;
+        public View card;
+
         public ViewHolder(View itemView){
             super(itemView);
 
             wifiName = itemView.findViewById(R.id.wifi_name);
             wifiSignal = itemView.findViewById(R.id.wifi_signal);
             wifiSpeed= itemView.findViewById(R.id.wifi_speed);
+            card = itemView.findViewById(R.id.card);
+
         }
 
         public void setItem(WiFi wifi){
