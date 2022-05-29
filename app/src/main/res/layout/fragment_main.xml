@@ -16,6 +16,21 @@
         app:layout_constraintTop_toTopOf="parent">
     </FrameLayout>
 
+
+    <FrameLayout
+        android:id="@+id/scanResultContainer"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </FrameLayout>
+
+
     <ImageButton
         android:id="@+id/list_button"
         android:layout_width="50dp"
