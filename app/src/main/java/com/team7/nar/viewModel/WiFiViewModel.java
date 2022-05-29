@@ -20,6 +20,7 @@ import com.team7.nar.model.WifiScanner;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class WiFiViewModel extends AndroidViewModel {
     static WifiScanner wifiScanner = new WifiScanner();
     WifiManager wifiManager;
@@ -104,7 +105,7 @@ public class WiFiViewModel extends AndroidViewModel {
     }
 
     public void scan(Context context){
-        WiFi avgWifi = new WiFi();
+        WiFi avgWifi;
         avgWifi = wifiScanner.scan(context);
 
         scanResultWifi.postValue(avgWifi);

@@ -1,7 +1,6 @@
 package com.team7.nar.view;
 
 import android.content.IntentFilter;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
@@ -36,6 +35,8 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
+    ScanResultFragment scanResultFragment;
+    EmptyResultFragment emptyResultFragment;
     WifiReceiver receiver = new WifiReceiver(this);
 
     public MainFragment() {
@@ -108,8 +109,10 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 new Observer<WiFi>() {
                     @Override
                     public void onChanged(WiFi wiFi) {
-                        viewModel.setRecommend(wiFi);
-                        // Temp fragment add
+                        if ( wiFi != null){
+                            viewModel.setRecommend(wiFi);
+                        }
+                        showScanResult(wiFi);
                     }
                 }
         );
@@ -176,10 +179,32 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
         Log.d("Recommend", "Main Fragment 에러");
 
-        RecommendFragment e = new RecommendFragment();
-        e.setArguments(bundle);
+        RecommendFragment recommendFragment = new RecommendFragment();
+        recommendFragment.setArguments(bundle);
 
-        e.show(getParentFragmentManager(), "popup");
+        recommendFragment.show(getParentFragmentManager(), "recommend Popup");
 
+    }
+
+    public void showScanResult(WiFi scannedWifi){
+        if (scannedWifi != null){
+            Bundle bundle = new Bundle();
+
+            bundle.putString("ssid", scannedWifi.getSsid());
+            bundle.putString("name", scannedWifi.getName());
+            bundle.putString("rssi", String.valueOf(scannedWifi.getRssiLevel()));
+            bundle.putString("speed", String.valueOf(scannedWifi.getLinkSpeed()));
+            bundle.putString("time", scannedWifi.getTime());
+
+            scanResultFragment = new ScanResultFragment();
+            scanResultFragment.setArguments(bundle);
+
+            getParentFragmentManager().beginTransaction().replace(R.id.scanResultContainer, scanResultFragment).commit();
+        }
+        else{
+            Log.d("scan result", "null scan");
+            emptyResultFragment = new EmptyResultFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.scanResultContainer, emptyResultFragment).commit();
+        }
     }
 }
