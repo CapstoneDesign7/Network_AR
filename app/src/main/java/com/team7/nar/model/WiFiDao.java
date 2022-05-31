@@ -1,6 +1,7 @@
 package com.team7.nar.model;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -23,7 +24,7 @@ public interface WiFiDao {
     void delete(WiFi wifi);
 
     @Query("SELECT * FROM wifi_list")
-    List<WiFi> getAll();
+    LiveData<List<WiFi>> getAll();
 
     @Query("SELECT * FROM wifi_list WHERE ssid = :ssid")
     LiveData<WiFi> getWiFi(String ssid);

@@ -9,23 +9,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.team7.nar.R;
+import com.team7.nar.FragmentAdapter;
 import com.team7.nar.databinding.WifiRecyclerviewBinding;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.model.WiFiRoomDatabase;
 import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WiFiList extends Fragment {
+public class WifiListFragment extends Fragment implements FragmentAdapter {
     private WifiRecyclerviewBinding binding;
     private WiFiViewModel viewModel;
     private WiFiRoomDatabase database;
@@ -45,10 +43,15 @@ public class WiFiList extends Fragment {
             @Override
             public void onChanged(List<WiFi> wiFis) {
                 recyclerView.setAdapter(
-                        new WifiAdapter(mycontext, wiFis)
+                        new WifiAdapter(mycontext, wiFis, viewModel, WifiListFragment.this)
                 );
             }
         });
     }
+    @Override
+    public FragmentManager getAdapterFragmentManager(){
+        return getParentFragmentManager();
+    }
+
 }
 

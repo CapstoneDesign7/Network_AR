@@ -27,7 +27,7 @@ public class WiFiViewModel extends AndroidViewModel {
     WiFi tmpWifi;
     WiFiRoomDatabase db;
 
-    public MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
+    public LiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi; // Current WiFi ssid
     private MutableLiveData<WiFi> scanResultWifi;  // Current WiFi for Scan
@@ -39,9 +39,9 @@ public class WiFiViewModel extends AndroidViewModel {
         return list;
     }
 
-    public MutableLiveData<List<WiFi>> getAllWifi(){
-        allWifi.postValue(getAllWifiFromDB());
-
+    public LiveData<List<WiFi>> getAllWifi(){
+        //allWifi.postValue(getAllWifiFromDB());
+        allWifi = getAllWifiFromDB();
         if (allWifi == null) {
             allWifi = new MutableLiveData<List<WiFi>> ();
         }
@@ -124,7 +124,7 @@ public class WiFiViewModel extends AndroidViewModel {
         }
     }
 
-    List<WiFi> getAllWifiFromDB() { return mWiFiDao.getAll(); }
+    LiveData<List<WiFi>> getAllWifiFromDB() { return mWiFiDao.getAll();}
 
     public void insert(WiFi wifi) { mWiFiDao.insert(wifi); }
 

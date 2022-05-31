@@ -60,7 +60,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/star_button"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
@@ -68,7 +68,7 @@
                 app:srcCompat="@drawable/ic_baseline_star_border_24" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/delete_button"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
