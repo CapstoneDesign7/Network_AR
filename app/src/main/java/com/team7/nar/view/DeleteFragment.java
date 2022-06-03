@@ -2,24 +2,15 @@ package com.team7.nar.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.team7.nar.FragmentAdapter;
-import com.team7.nar.R;
 import com.team7.nar.model.WiFi;
-import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
 public class DeleteFragment extends DialogFragment {

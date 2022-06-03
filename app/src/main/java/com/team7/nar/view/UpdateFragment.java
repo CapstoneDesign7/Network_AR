@@ -4,24 +4,20 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.team7.nar.R;
 import com.team7.nar.model.WiFi;
-import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
 public class UpdateFragment extends DialogFragment {
     private WiFiViewModel viewModel;
     private WiFi wifi;
-    private WifiAdapter wifiAdapter;
     String newName;
 
     @Override
