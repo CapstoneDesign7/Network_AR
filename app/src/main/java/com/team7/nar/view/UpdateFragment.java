@@ -37,7 +37,7 @@ public class UpdateFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("수정")
-                .setMessage(wifi.getSsid() + "를 수정하시겠습니까?")
+                .setMessage(wifi.getName() + "를 수정하시겠습니까?")
                 .setView(alertView)
                 .setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
