@@ -46,8 +46,6 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         this.wifis=wifis;
         this.fragmentManager = fragmentAdapter.getAdapterFragmentManager();
     }
-    public WifiAdapter(){
-    }
 
     @NonNull
     @Override
@@ -111,34 +109,27 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
     public void deletePopup(WiFi wifi) {
         Bundle bundle = new Bundle();
         bundle.putString("ssid", wifi.getSsid());
-        bundle.putString("ssid", wifi.getSsid());
         bundle.putString("name", wifi.getName());
         bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
         bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
-        bundle.putString("time", String.valueOf(wifi.getTime()));
+        bundle.putString("time", wifi.getTime());
 
         DeleteFragment deleteFragment = new DeleteFragment();
         deleteFragment.setArguments(bundle);
         deleteFragment.show(fragmentManager, "delete Popup");
     }
 
-    public void deleteThread(WiFi wifi, WiFiViewModel viewModel){
-        Log.d("delete thread", wifi.toString());
-        new Thread(() -> viewModel.delete(wifi)).start();
-    }
-
     public void updatePopup(WiFi wifi){
         Bundle bundle = new Bundle();
-        bundle.putString("ssid", wifi.getSsid());
         bundle.putString("ssid", wifi.getSsid());
         bundle.putString("name", wifi.getName());
         bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
         bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
-        bundle.putString("time", String.valueOf(wifi.getTime()));
+        bundle.putString("time", wifi.getTime());
 
         UpdateFragment updateFragment = new UpdateFragment();
         updateFragment.setArguments(bundle);
-        updateFragment.show(fragmentManager, "delete Popup");
+        updateFragment.show(fragmentManager, "update Popup");
     }
 
 }

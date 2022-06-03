@@ -132,9 +132,7 @@ public class WiFiViewModel extends AndroidViewModel {
 
     public void update(WiFi wifi) { mWiFiDao.update(wifi); }
 
-    public void delete(WiFi wifi) {
-        Log.d("DAO Delete Call", wifi.toString());
-        mWiFiDao.delete(wifi); }
+    public void delete(WiFi wifi) { mWiFiDao.delete(wifi); }
 
     public void getWiFi(String ssid) { mWiFiDao.getWiFi(ssid); }
 
