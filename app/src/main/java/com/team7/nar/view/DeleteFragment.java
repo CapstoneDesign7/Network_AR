@@ -36,7 +36,7 @@ public class DeleteFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("삭제")
-                .setMessage(wifi.getSsid()+"를 삭제하시겠습니까?")
+                .setMessage(wifi.getName()+"를 삭제하시겠습니까?")
                 .setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
