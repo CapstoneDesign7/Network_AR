@@ -22,32 +22,27 @@ import com.team7.nar.model.WiFi;
 import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class DeleteFragment extends DialogFragment {
     private WiFiViewModel viewModel;
     private WiFi wifi;
-    private WifiAdapter wifiAdapter;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
-        String deleteSsid = getArguments().getString("ssid").replaceAll("^\"|\"$", "");
-        String deleteName = getArguments().getString("name").replaceAll("^\"|\"$", "");
-        int deleteRssi = Integer.parseInt(getArguments().getString("rssi"));
-        int deleteSpeed = Integer.parseInt(getArguments().getString("speed"));
-        String deleteTime = getArguments().getString("time");
+        if (getArguments() != null){
+            wifi = (WiFi) getArguments().getSerializable("wifi");
+        }
+        Log.d("Serialize Object", wifi.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("삭제")
-                .setMessage(deleteSsid+"를 삭제하시겠습니까?")
+                .setMessage(wifi.getSsid()+"를 삭제하시겠습니까?")
                 .setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // YES
-                        wifi = new WiFi(deleteSsid, deleteName, deleteSpeed, deleteRssi, deleteTime);
-                        new Thread(() -> viewModel.delete(wifi)).start(); }
+                        new Thread(() -> viewModel.delete(wifi)).start();
+                    }
                 })
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override

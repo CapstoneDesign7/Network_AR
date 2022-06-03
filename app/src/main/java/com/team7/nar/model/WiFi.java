@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "wifi_list")
-public class WiFi {
+public class WiFi implements Serializable {
     @Override
     public String toString() {
         return "WiFi{" +
