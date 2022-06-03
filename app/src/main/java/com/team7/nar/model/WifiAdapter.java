@@ -11,15 +11,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
+import com.team7.nar.view.UpdateFragment;
 import com.team7.nar.view.WifiListFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
@@ -28,12 +31,22 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
     private WiFiViewModel viewModel;
     private WifiListFragment wiFiList;
     private FragmentManager fragmentManager;
+    private DeleteFragment deleteFragment;
+
 
     public WifiAdapter(Context context, List<WiFi> wifis, WiFiViewModel viewModel, FragmentAdapter fragmentAdapter){
         this.context=context;
         this.wifis=wifis;
         this.viewModel=viewModel;
         this.fragmentManager = fragmentAdapter.getAdapterFragmentManager();
+    }
+
+    public WifiAdapter(Context context, List<WiFi> wifis, FragmentAdapter fragmentAdapter){
+        this.context=context;
+        this.wifis=wifis;
+        this.fragmentManager = fragmentAdapter.getAdapterFragmentManager();
+    }
+    public WifiAdapter(){
     }
 
     @NonNull
@@ -49,22 +62,21 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         WiFi wifi = wifis.get(position);
         holder.setItem(wifi);
 
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("delete", wifi.toString());
-                deletePopup(wifi.getSsid());
+                    @Override
+                    public void onClick(View view) {
+                        deletePopup(wifi);
             }
         });
 
-//        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                viewModel.update(wifi);
-//                return false;
-//            }
-//        });
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                updatePopup(wifi);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -95,13 +107,38 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
             wifiSpeed.setText(String.valueOf(wifi.getLinkSpeed()));
         }
     }
-    public void deletePopup(String ssid) {
+
+    public void deletePopup(WiFi wifi) {
         Bundle bundle = new Bundle();
-        bundle.putString("ssid", ssid);
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("name", wifi.getName());
+        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
+        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
+        bundle.putString("time", String.valueOf(wifi.getTime()));
 
         DeleteFragment deleteFragment = new DeleteFragment();
         deleteFragment.setArguments(bundle);
-
         deleteFragment.show(fragmentManager, "delete Popup");
     }
+
+    public void deleteThread(WiFi wifi, WiFiViewModel viewModel){
+        Log.d("delete thread", wifi.toString());
+        new Thread(() -> viewModel.delete(wifi)).start();
+    }
+
+    public void updatePopup(WiFi wifi){
+        Bundle bundle = new Bundle();
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("name", wifi.getName());
+        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
+        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
+        bundle.putString("time", String.valueOf(wifi.getTime()));
+
+        UpdateFragment updateFragment = new UpdateFragment();
+        updateFragment.setArguments(bundle);
+        updateFragment.show(fragmentManager, "delete Popup");
+    }
+
 }

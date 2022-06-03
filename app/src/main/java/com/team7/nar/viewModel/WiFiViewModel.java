@@ -93,7 +93,7 @@ public class WiFiViewModel extends AndroidViewModel {
             }
         }
         if (max_rssi > curWifi.getRssiLevel()) {
-
+            tmp_ssid = tmp_ssid.replaceAll("^\"|\"$", "");
             recommendedWiFi.setValue(tmp_ssid);
         }
     }
@@ -114,6 +114,8 @@ public class WiFiViewModel extends AndroidViewModel {
     public void save(){
         if (getCurrentWifi().getValue() != null){
             tmpWifi = getCurrentWifi().getValue();
+            tmpWifi.setSsid(tmpWifi.getSsid().replaceAll("^\"|\"$", ""));
+            tmpWifi.setName(tmpWifi.getName().replaceAll("^\"|\"$", ""));
 
             if (tmpWifi != null) {
                 insert(tmpWifi);
@@ -130,7 +132,9 @@ public class WiFiViewModel extends AndroidViewModel {
 
     public void update(WiFi wifi) { mWiFiDao.update(wifi); }
 
-    public void delete(WiFi wifi) { mWiFiDao.delete(wifi); }
+    public void delete(WiFi wifi) {
+        Log.d("DAO Delete Call", wifi.toString());
+        mWiFiDao.delete(wifi); }
 
     public void getWiFi(String ssid) { mWiFiDao.getWiFi(ssid); }
 

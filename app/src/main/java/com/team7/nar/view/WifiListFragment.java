@@ -28,6 +28,7 @@ public class WifiListFragment extends Fragment implements FragmentAdapter {
     private WiFiViewModel viewModel;
     private WiFiRoomDatabase database;
     private Context mycontext;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         binding = WifiRecyclerviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -43,15 +44,31 @@ public class WifiListFragment extends Fragment implements FragmentAdapter {
             @Override
             public void onChanged(List<WiFi> wiFis) {
                 recyclerView.setAdapter(
-                        new WifiAdapter(mycontext, wiFis, viewModel, WifiListFragment.this)
+//                        new WifiAdapter(mycontext, wiFis, viewModel, WifiListFragment.this)
+                          new WifiAdapter(mycontext, wiFis, WifiListFragment.this)
                 );
             }
         });
     }
+
     @Override
     public FragmentManager getAdapterFragmentManager(){
         return getParentFragmentManager();
     }
 
+    public void deletePopup(WiFi wifi) {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("name", wifi.getName());
+        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
+        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
+        bundle.putString("time", String.valueOf(wifi.getTime()));
+
+        DeleteFragment deleteFragment = new DeleteFragment();
+        deleteFragment.setArguments(bundle);
+
+        deleteFragment.show(getParentFragmentManager(), "delete Popup");
+    }
 }
 
