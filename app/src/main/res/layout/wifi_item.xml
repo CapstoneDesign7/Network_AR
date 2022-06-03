@@ -55,6 +55,7 @@
                         android:layout_height="wrap_content"
                         android:text="Signal Level : "
                         android:textStyle="bold"
+                        android:textColor="#B0000000"
                         />
 
                     <TextView
@@ -86,6 +87,7 @@
                         android:layout_height="wrap_content"
                         android:text="Link Speed : "
                         android:textStyle="bold"
+                        android:textColor="#B0000000"
                         />
 
                     <TextView
