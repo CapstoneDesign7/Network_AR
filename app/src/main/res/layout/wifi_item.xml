@@ -35,20 +35,20 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="5dp">
 
-
                 <TextView
                     android:id="@+id/wifi_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="CNU_wifi1"
-                    android:layout_marginVertical="3dp"
+                    android:layout_height="0dp"
+                    android:text="WiFi Name"
                     style="@style/wifi_name"
+                    android:layout_weight="3"
                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:layout_weight="2">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                         android:id="@+id/wifi_signal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-42 dbm"
+                        android:text="-42"
                         android:textColor="#B0000000"
                         />
 
@@ -76,8 +76,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:orientation="horizontal"
+                    android:layout_weight="2"
                     >
 
                     <TextView
@@ -91,7 +92,7 @@
                         android:id="@+id/wifi_speed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="speed: 158mbps"
+                        android:text="158"
                         android:textColor="#B0000000" />
 
                     <TextView
