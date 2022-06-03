@@ -32,17 +32,12 @@ public class DeleteFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
         String deleteSsid = getArguments().getString("ssid").replaceAll("^\"|\"$", "");
         String deleteName = getArguments().getString("name").replaceAll("^\"|\"$", "");
         int deleteRssi = Integer.parseInt(getArguments().getString("rssi"));
         int deleteSpeed = Integer.parseInt(getArguments().getString("speed"));
         String deleteTime = getArguments().getString("time");
-
-//        Log.d("ssid", deleteSsid);
-//        Log.d("name", deleteName);
-//        Log.d("rssi", String.valueOf(deleteRssi));
-//        Log.d("speed", String.valueOf(deleteSpeed));
-//        Log.d("time", deleteTime);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("삭제")
@@ -51,13 +46,8 @@ public class DeleteFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // YES
-                        viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
                         wifi = new WiFi(deleteSsid, deleteName, deleteSpeed, deleteRssi, deleteTime);
-//                        Log.d("delete fragment", wifi.toString());
-//                        new Thread(() -> viewModel.delete(wifi));
-                        wifiAdapter = new WifiAdapter();
-                        wifiAdapter.deleteThread(wifi, viewModel);
-                    }
+                        new Thread(() -> viewModel.delete(wifi)).start(); }
                 })
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
