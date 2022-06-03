@@ -2,7 +2,6 @@ package com.team7.nar.model;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,35 +10,23 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
 import com.team7.nar.view.UpdateFragment;
-import com.team7.nar.view.WifiListFragment;
-import com.team7.nar.viewModel.WiFiViewModel;
 
 import java.util.List;
-import java.util.Objects;
-
 
 public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
     private Context context;
     private List<WiFi> wifis;
-    private WiFiViewModel viewModel;
-    private WifiListFragment wiFiList;
     private FragmentManager fragmentManager;
     private DeleteFragment deleteFragment;
+    private UpdateFragment updateFragment;
 
 
-    public WifiAdapter(Context context, List<WiFi> wifis, WiFiViewModel viewModel, FragmentAdapter fragmentAdapter){
-        this.context=context;
-        this.wifis=wifis;
-        this.viewModel=viewModel;
-        this.fragmentManager = fragmentAdapter.getAdapterFragmentManager();
-    }
 
     public WifiAdapter(Context context, List<WiFi> wifis, FragmentAdapter fragmentAdapter){
         this.context=context;
@@ -110,7 +97,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         Bundle bundle = new Bundle();
         bundle.putSerializable("wifi", wifi);
 
-        DeleteFragment deleteFragment = new DeleteFragment();
+        deleteFragment = new DeleteFragment();
         deleteFragment.setArguments(bundle);
         deleteFragment.show(fragmentManager, "delete Popup");
     }
@@ -119,7 +106,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         Bundle bundle = new Bundle();
         bundle.putSerializable("wifi", wifi);
 
-        UpdateFragment updateFragment = new UpdateFragment();
+        updateFragment = new UpdateFragment();
         updateFragment.setArguments(bundle);
         updateFragment.show(fragmentManager, "update Popup");
     }

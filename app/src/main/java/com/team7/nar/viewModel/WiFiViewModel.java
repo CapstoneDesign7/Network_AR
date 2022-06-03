@@ -95,7 +95,7 @@ public class WiFiViewModel extends AndroidViewModel {
 
         if (max_rssi > curWifi.getRssiLevel()){
             // Except Current WiFi
-            if (!tmp_ssid.equals(curWifi.getSsid().replaceAll("^\"|\"$", ""))) {
+            if (!tmp_ssid.equals(curWifi.getSsid())) {
                 recommendedWiFi.setValue(tmp_ssid);
             }
         }
@@ -118,8 +118,8 @@ public class WiFiViewModel extends AndroidViewModel {
     public void save(){
         if (getCurrentWifi().getValue() != null){
             tmpWifi = getCurrentWifi().getValue();
-            tmpWifi.setSsid(tmpWifi.getSsid().replaceAll("^\"|\"$", ""));
-            tmpWifi.setName(tmpWifi.getName().replaceAll("^\"|\"$", ""));
+            tmpWifi.setSsid(tmpWifi.getSsid());
+            tmpWifi.setName(tmpWifi.getName());
 
             if (tmpWifi != null) {
                 insert(tmpWifi);

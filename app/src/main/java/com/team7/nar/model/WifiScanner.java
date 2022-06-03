@@ -21,7 +21,9 @@ public class WifiScanner {
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         String tmp = connectionInfo.getSupplicantState().toString();
         if (tmp.equals("COMPLETED")){
-            return new WiFi(connectionInfo.getSSID(),getNameFromSSID(connectionInfo.getSSID()),connectionInfo.getLinkSpeed(),
+            return new WiFi(connectionInfo.getSSID().replaceAll("^\"|\"$", ""),
+                    getNameFromSSID(connectionInfo.getSSID()).replaceAll("^\"|\"$", ""),
+                    connectionInfo.getLinkSpeed(),
                     connectionInfo.getRssi(), (Calendar. getInstance(). getTime()).toString());
         }
         else{

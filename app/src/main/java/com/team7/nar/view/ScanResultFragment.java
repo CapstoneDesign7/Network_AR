@@ -5,13 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.team7.nar.databinding.ScanResultBinding;
-import com.team7.nar.viewModel.WiFiViewModel;
 
 public class ScanResultFragment extends Fragment {
     private ScanResultBinding binding;
