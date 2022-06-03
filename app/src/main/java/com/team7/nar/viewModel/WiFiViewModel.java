@@ -27,7 +27,7 @@ public class WiFiViewModel extends AndroidViewModel {
     WiFi tmpWifi;
     WiFiRoomDatabase db;
 
-    public MutableLiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
+    public LiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi; // Current WiFi ssid
     private MutableLiveData<WiFi> scanResultWifi;  // Current WiFi for Scan
@@ -39,9 +39,9 @@ public class WiFiViewModel extends AndroidViewModel {
         return list;
     }
 
-    public MutableLiveData<List<WiFi>> getAllWifi(){
-        allWifi.postValue(getAllWifiFromDB());
-
+    public LiveData<List<WiFi>> getAllWifi(){
+        //allWifi.postValue(getAllWifiFromDB());
+        allWifi = getAllWifiFromDB();
         if (allWifi == null) {
             allWifi = new MutableLiveData<List<WiFi>> ();
         }
@@ -93,7 +93,7 @@ public class WiFiViewModel extends AndroidViewModel {
             }
         }
         if (max_rssi > curWifi.getRssiLevel()) {
-
+            tmp_ssid = tmp_ssid.replaceAll("^\"|\"$", "");
             recommendedWiFi.setValue(tmp_ssid);
         }
     }
@@ -114,6 +114,8 @@ public class WiFiViewModel extends AndroidViewModel {
     public void save(){
         if (getCurrentWifi().getValue() != null){
             tmpWifi = getCurrentWifi().getValue();
+            tmpWifi.setSsid(tmpWifi.getSsid().replaceAll("^\"|\"$", ""));
+            tmpWifi.setName(tmpWifi.getName().replaceAll("^\"|\"$", ""));
 
             if (tmpWifi != null) {
                 insert(tmpWifi);
@@ -124,13 +126,15 @@ public class WiFiViewModel extends AndroidViewModel {
         }
     }
 
-    List<WiFi> getAllWifiFromDB() { return mWiFiDao.getAll(); }
+    LiveData<List<WiFi>> getAllWifiFromDB() { return mWiFiDao.getAll();}
 
     public void insert(WiFi wifi) { mWiFiDao.insert(wifi); }
 
     public void update(WiFi wifi) { mWiFiDao.update(wifi); }
 
-    public void delete(WiFi wifi) { mWiFiDao.delete(wifi); }
+    public void delete(WiFi wifi) {
+        Log.d("DAO Delete Call", wifi.toString());
+        mWiFiDao.delete(wifi); }
 
     public void getWiFi(String ssid) { mWiFiDao.getWiFi(ssid); }
 

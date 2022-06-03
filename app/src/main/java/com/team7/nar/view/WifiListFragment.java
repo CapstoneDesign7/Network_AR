@@ -9,27 +9,26 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.team7.nar.R;
+import com.team7.nar.FragmentAdapter;
 import com.team7.nar.databinding.WifiRecyclerviewBinding;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.model.WiFiRoomDatabase;
 import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WiFiList extends Fragment {
+public class WifiListFragment extends Fragment implements FragmentAdapter {
     private WifiRecyclerviewBinding binding;
     private WiFiViewModel viewModel;
     private WiFiRoomDatabase database;
     private Context mycontext;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         binding = WifiRecyclerviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -45,10 +44,31 @@ public class WiFiList extends Fragment {
             @Override
             public void onChanged(List<WiFi> wiFis) {
                 recyclerView.setAdapter(
-                        new WifiAdapter(mycontext, wiFis)
+//                        new WifiAdapter(mycontext, wiFis, viewModel, WifiListFragment.this)
+                          new WifiAdapter(mycontext, wiFis, WifiListFragment.this)
                 );
             }
         });
+    }
+
+    @Override
+    public FragmentManager getAdapterFragmentManager(){
+        return getParentFragmentManager();
+    }
+
+    public void deletePopup(WiFi wifi) {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("ssid", wifi.getSsid());
+        bundle.putString("name", wifi.getName());
+        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
+        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
+        bundle.putString("time", String.valueOf(wifi.getTime()));
+
+        DeleteFragment deleteFragment = new DeleteFragment();
+        deleteFragment.setArguments(bundle);
+
+        deleteFragment.show(getParentFragmentManager(), "delete Popup");
     }
 }
 

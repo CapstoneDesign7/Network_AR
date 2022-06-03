@@ -16,6 +16,6 @@
     </fragment>
     <fragment
         android:id="@+id/wiFiList"
-        android:name="com.team7.nar.view.WiFiList"
+        android:name="com.team7.nar.view.WifiListFragment"
         android:label="WiFiList" />
 </navigation>
