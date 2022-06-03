@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
-//import com.team7.nar.view.UpdateFragment;
+import com.team7.nar.view.UpdateFragment;
 import com.team7.nar.view.WifiListFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
 
@@ -71,7 +71,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-//                updatePopup(wifi);
+                updatePopup(wifi);
                 return false;
             }
         });
