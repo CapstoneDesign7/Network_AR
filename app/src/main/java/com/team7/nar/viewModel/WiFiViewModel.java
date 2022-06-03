@@ -92,11 +92,15 @@ public class WiFiViewModel extends AndroidViewModel {
                 tmp_ssid = scanResult.SSID;
             }
         }
-        if (max_rssi > curWifi.getRssiLevel()) {
-            tmp_ssid = tmp_ssid.replaceAll("^\"|\"$", "");
-            recommendedWiFi.setValue(tmp_ssid);
+
+        if (max_rssi > curWifi.getRssiLevel()){
+            // Except Current WiFi
+            if (!tmp_ssid.equals(curWifi.getSsid().replaceAll("^\"|\"$", ""))) {
+                recommendedWiFi.setValue(tmp_ssid);
+            }
         }
     }
+
 
     public WiFiViewModel(@NonNull Application application) {
         super(application);

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
-import com.team7.nar.view.UpdateFragment;
+//import com.team7.nar.view.UpdateFragment;
 import com.team7.nar.view.WifiListFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
 
@@ -71,7 +71,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                updatePopup(wifi);
+//                updatePopup(wifi);
                 return false;
             }
         });
@@ -108,11 +108,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
 
     public void deletePopup(WiFi wifi) {
         Bundle bundle = new Bundle();
-        bundle.putString("ssid", wifi.getSsid());
-        bundle.putString("name", wifi.getName());
-        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
-        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
-        bundle.putString("time", wifi.getTime());
+        bundle.putSerializable("wifi", wifi);
 
         DeleteFragment deleteFragment = new DeleteFragment();
         deleteFragment.setArguments(bundle);
@@ -121,11 +117,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
 
     public void updatePopup(WiFi wifi){
         Bundle bundle = new Bundle();
-        bundle.putString("ssid", wifi.getSsid());
-        bundle.putString("name", wifi.getName());
-        bundle.putString("rssi", String.valueOf(wifi.getRssiLevel()));
-        bundle.putString("speed", String.valueOf(wifi.getLinkSpeed()));
-        bundle.putString("time", wifi.getTime());
+        bundle.putSerializable("wifi", wifi);
 
         UpdateFragment updateFragment = new UpdateFragment();
         updateFragment.setArguments(bundle);
