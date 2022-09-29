@@ -17,3 +17,4 @@ local.properties
 .idea
 captures
 /app/fabric.properties
+/unityLibrary
