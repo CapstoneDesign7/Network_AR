@@ -4,6 +4,9 @@ buildscript {
     repositories {
         mavenCentral()
         google()
+        flatDir {
+            dirs "${project(':unityLibrary').projectDir}/libs"
+        }
     }
     dependencies {
         def nav_version = "2.4.2"

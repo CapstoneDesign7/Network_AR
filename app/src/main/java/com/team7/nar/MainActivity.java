@@ -2,6 +2,8 @@ package com.team7.nar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -10,34 +12,101 @@ import android.Manifest;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.team7.nar.databinding.ActivityMainBinding;
+import com.team7.nar.view.MainFragment;
+import com.team7.nar.view.WifiListFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
+import com.unity3d.player.UnityPlayer;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private WiFiViewModel viewModel;
-
+    public UnityPlayer mUnityPlayer;
+    public FragmentManager mFragmentManager;
+    public MainFragment mainFragment;
+    public WifiListFragment wifiListFragment;
+    private FragmentTransaction transaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("activitylifecycle","onCreate");
+        mFragmentManager = getSupportFragmentManager();
+        mainFragment = new MainFragment();
+        wifiListFragment = new WifiListFragment();
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(WiFiViewModel.class);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         onCheckPermission();
-        NavHostFragment navHostFragment =
-                (NavHostFragment) this.getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-
+        mUnityPlayer = new UnityPlayer(this);
+        transaction = mFragmentManager.beginTransaction();
+        transaction.replace(R.id.container, mainFragment).commit();
+    }
+    /** FOR UNITY **/
+    @Override
+    protected void onPause() {
+        Log.d("activitylifecycle","onPause");
+        super.onPause();
+        mUnityPlayer.pause();
     }
 
+    // Resume Unity
+    @Override protected void onResume()
+    {
+        Log.d("activitylifecycle","onResume");
+        super.onResume();
+        mUnityPlayer.resume();
+    }
+
+    // Low Memory Unity
+    @Override public void onLowMemory()
+    {
+        super.onLowMemory();
+        mUnityPlayer.lowMemory();
+    }
+
+    // Trim Memory Unity
+    @Override public void onTrimMemory(int level)
+    {
+        super.onTrimMemory(level);
+        if (level == TRIM_MEMORY_RUNNING_CRITICAL)
+        {
+            mUnityPlayer.lowMemory();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mUnityPlayer.configurationChanged(newConfig);
+    }
+
+
+
+    // Notify Unity of the focus change.
+    @Override public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
+        mUnityPlayer.windowFocusChanged(hasFocus);
+    }
+
+    // For some reason the multiple keyevent type is not supported by the ndk.
+
+    @Override
+    protected void onDestroy() {
+        Log.d("activitylifecycle","onDestroy");
+        super.onDestroy();
+        mUnityPlayer.quit();
+    }
 
     private void onCheckPermission() {
         String[] permission_list = {
@@ -85,5 +154,11 @@ public class MainActivity extends AppCompatActivity {
         intent.setData(uri);
         startActivity(intent);
         overridePendingTransition(0,0);
+    }
+
+
+    public void overlayList() {
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.container, wifiListFragment).addToBackStack(null).commit(); ;
     }
 }
