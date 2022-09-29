@@ -14,15 +14,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.team7.nar.MainActivity;
 import com.team7.nar.R;
 import com.team7.nar.WifiBroadcastListener;
 import com.team7.nar.WifiReceiver;
 import com.team7.nar.databinding.FragmentMainBinding;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.viewModel.WiFiViewModel;
-
+import com.unity3d.player.UnityPlayer;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MainFragment#newInstance} factory method to
@@ -31,13 +38,13 @@ import com.team7.nar.viewModel.WiFiViewModel;
 public class MainFragment extends Fragment implements WifiBroadcastListener {
     private FragmentMainBinding binding;
     private WiFiViewModel viewModel;
-
+    FrameLayout frameLayoutForUnity;
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
     ScanResultFragment scanResultFragment;
     EmptyResultFragment emptyResultFragment;
     WifiReceiver receiver = new WifiReceiver(this);
-
+    protected UnityPlayer unityPlayer;
     public MainFragment() {
 
     }
@@ -49,6 +56,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
 
     public static MainFragment newInstance(String param1, String param2) {
+        Log.d("lifecycle","newInstance");
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -57,27 +65,43 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("lifecycle","onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("lifecycle","onCreateView");
+        unityPlayer = ((MainActivity) getActivity()).mUnityPlayer;
+        int glesMode = unityPlayer.getSettings().getInt("gles_mode", 1);
+        unityPlayer.init(glesMode, false);
+
         binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        this.frameLayoutForUnity = (FrameLayout) binding.unityContainer;
+
+
         return view;
     }
+//    @Override
+//    public void onDestroy() {
+//        unityPlayer.quit();
+//        super.onDestroy();
+//    }
 
     @Override
     public void onDestroyView() {
+        Log.d("lifecycle","onDestroyView");
         super.onDestroyView();
+
         binding = null;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        Log.d("lifecycle","onViewCreated");
         viewModel = new ViewModelProvider(requireActivity()).get(WiFiViewModel.class);
 
         changeFragment(0, "default disconnected");
@@ -111,7 +135,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                         if ( wiFi != null){
                             viewModel.setRecommend(wiFi);
                         }
-                        showScanResult(wiFi);
+                        //showScanResult(wiFi);
                     }
                 }
         );
@@ -121,7 +145,8 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "List clicked", Toast.LENGTH_LONG).show();
                 new Thread(() -> viewModel.getAllWifi()).start();
-                Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
+                ((MainActivity) getActivity()).overlayList();
+                //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
             }
         });
 
@@ -129,6 +154,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             @Override
             public void onClick(View v) {
                 new Thread(() -> viewModel.scan(getContext())).start();
+                unityPlayer.UnitySendMessage("Spawner", "PlaceObjectByTouch", "");
                 Log.d("clicked", "scanbutton clicked");
             }
         });
@@ -140,27 +166,33 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 new Thread(() -> viewModel.save()).start();
             }
         });
-
-        // 임시로 AR Fragment 테스트
-        binding.tempArFragment.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToARFragment());
-            }
-        });
     }
 
     @Override
     public void onResume() {
+        Log.d("lifecycle","onResume");
         super.onResume();
+        this.frameLayoutForUnity.addView(unityPlayer.getView(), FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        unityPlayer.requestFocus();
+        unityPlayer.windowFocusChanged(true);
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         getActivity().registerReceiver(receiver, intentFilter);
     }
 
     @Override
+    public void onStart() {
+        Log.d("lifecycle","onstart");
+        super.onStart();
+
+    }
+
+    @Override
     public void onPause() {
+        Log.d("lifecycle","onPause");
         super.onPause();
+        this.frameLayoutForUnity.removeAllViews();
         getActivity().unregisterReceiver(receiver);
     }
 
@@ -193,25 +225,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
 
     }
 
-    public void showScanResult(WiFi scannedWifi){
-        if (scannedWifi != null){
-            Bundle bundle = new Bundle();
+    public void showScanResult(WiFi scannedWifi) {
 
-            bundle.putString("ssid", scannedWifi.getSsid());
-            bundle.putString("name", scannedWifi.getName());
-            bundle.putString("rssi", String.valueOf(scannedWifi.getRssiLevel()));
-            bundle.putString("speed", String.valueOf(scannedWifi.getLinkSpeed()));
-            bundle.putString("time", scannedWifi.getTime());
-
-            scanResultFragment = new ScanResultFragment();
-            scanResultFragment.setArguments(bundle);
-
-            getParentFragmentManager().beginTransaction().replace(R.id.scanResultContainer, scanResultFragment).commit();
-        }
-        else{
-            Log.d("scan result", "null scan");
-            emptyResultFragment = new EmptyResultFragment();
-            getParentFragmentManager().beginTransaction().replace(R.id.scanResultContainer, emptyResultFragment).commit();
-        }
     }
 }

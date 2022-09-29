@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
 }
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 
 android {
     viewBinding{
@@ -42,8 +42,8 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:$nav_version"
 
     // Kotlin
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+//    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+//    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // Feature module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
@@ -62,8 +62,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //kotlin added
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation "androidx.core:core-ktx:+"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Room DB
     def room_version = "2.4.2"
@@ -90,8 +90,9 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-
-
+    //Unity
+    implementation project(':unityLibrary')
+    implementation fileTree(dir: project(':unityLibrary').getProjectDir().toString() + ('\\libs'), include: ['*.jar', '*.aar'])
 
 }
 repositories {
