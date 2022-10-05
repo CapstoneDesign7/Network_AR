@@ -2,21 +2,29 @@ package com.team7.nar.model;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Transaction;
 
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
+import com.team7.nar.view.PhotoFragment;
 import com.team7.nar.view.UpdateFragment;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
@@ -26,12 +34,16 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
     private DeleteFragment deleteFragment;
     private UpdateFragment updateFragment;
 
+    WifiAdapter.fragmentListner mlistener;
+    public interface fragmentListner{
+        void listen(List<File> files,File dir);
+    }
 
-
-    public WifiAdapter(Context context, List<WiFi> wifis, FragmentAdapter fragmentAdapter){
+    public WifiAdapter(Context context, List<WiFi> wifis, FragmentAdapter fragmentAdapter,fragmentListner listner){
         this.context=context;
         this.wifis=wifis;
         this.fragmentManager = fragmentAdapter.getAdapterFragmentManager();
+        this.mlistener = listner;
     }
 
     @NonNull
@@ -62,6 +74,23 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
                 return false;
             }
         });
+
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String path = ((AppCompatActivity)context).getExternalFilesDir(null).toString()+"/"+wifi.getSsid();
+                Log.d("holder path:",path);
+                File directory = new File(path);
+                if(directory.exists()){
+                    mlistener.listen(Arrays.asList(directory.listFiles()),directory);
+                    overlayPhoto();
+                }
+
+
+            }
+        });
+
+
     }
 
     @Override
@@ -109,6 +138,12 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         updateFragment = new UpdateFragment();
         updateFragment.setArguments(bundle);
         updateFragment.show(fragmentManager, "update Popup");
+    }
+    public void overlayPhoto() {
+        PhotoFragment photoFragment = new PhotoFragment();
+        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.container, photoFragment).addToBackStack(null).commit();
     }
 
 }

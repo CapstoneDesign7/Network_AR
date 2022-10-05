@@ -35,6 +35,7 @@ import com.team7.nar.viewModel.WiFiViewModel;
 import com.unity3d.player.UnityPlayer;
 
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -156,14 +157,18 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             }
         });
 
-        binding.PhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "photobutton clicked", Toast.LENGTH_LONG).show();
-                ((MainActivity) getActivity()).overlayPhoto();
-                //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
-            }
-        });
+//        binding.PhotoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getContext(), "photobutton clicked", Toast.LENGTH_LONG).show();
+//                String path = getActivity().getExternalFilesDir(null).toString();
+//                File directory = new File(path);
+//                viewModel.screenshots.setValue(Arrays.asList(directory.listFiles()));
+//                viewModel.parentPath.setValue(directory);
+//                ((MainActivity) getActivity()).overlayPhoto();
+//                //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
+//            }
+//        });
 
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +177,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 unityPlayer.UnitySendMessage("Spawner", "PlaceObjectByTouch", "");
                 Log.d("clicked", "scanbutton clicked");
                 Log.d("picture directory", getActivity().getExternalFilesDir(null).toString());
-                unityPlayer.UnitySendMessage("Spawner","ScreenShot","");
                 String path = getActivity().getExternalFilesDir(null).toString();
                 Log.d("Files", "Path: " + path);
                 File directory = new File(path);
@@ -190,6 +194,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Save clicked", Toast.LENGTH_LONG).show();
                 new Thread(() -> viewModel.save()).start();
+                unityPlayer.UnitySendMessage("Spawner","ScreenShot","");
                 SurfaceView surfaceView=(SurfaceView) ((FrameLayout)unityPlayer.getView()).getChildAt(0);
             }
         });
