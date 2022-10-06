@@ -195,7 +195,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 Toast.makeText(getContext(), "Save clicked", Toast.LENGTH_LONG).show();
                 new Thread(() -> viewModel.save()).start();
                 unityPlayer.UnitySendMessage("Spawner","ScreenShot","");
-                SurfaceView surfaceView=(SurfaceView) ((FrameLayout)unityPlayer.getView()).getChildAt(0);
             }
         });
     }

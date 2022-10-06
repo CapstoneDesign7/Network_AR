@@ -85,12 +85,8 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
                     mlistener.listen(Arrays.asList(directory.listFiles()),directory);
                     overlayPhoto();
                 }
-
-
             }
         });
-
-
     }
 
     @Override
@@ -139,11 +135,11 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
         updateFragment.setArguments(bundle);
         updateFragment.show(fragmentManager, "update Popup");
     }
+
     public void overlayPhoto() {
         PhotoFragment photoFragment = new PhotoFragment();
         FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.container, photoFragment).addToBackStack(null).commit();
     }
-
 }
