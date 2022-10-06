@@ -36,12 +36,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PhotoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-
 public class PhotoFragment extends Fragment implements FragmentAdapter {
     private ScreenshotRecyclerviewBinding binding;
     private WiFiViewModel viewModel;

@@ -19,12 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.team7.nar.FragmentAdapter;
 import com.team7.nar.R;
 import com.team7.nar.view.DeleteFragment;
+import com.team7.nar.view.DetailFragment;
+import com.team7.nar.view.PhotoFragment;
 import com.team7.nar.view.UpdateFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
 
@@ -167,6 +170,8 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
             }
 
         });
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +187,8 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
                     // display toast
                     Toast.makeText(context.getApplicationContext(), "You Clicked"+files.get(holder.getAdapterPosition()),
                             Toast.LENGTH_SHORT).show();
+                    Log.d("overLay", files.get(holder.getAdapterPosition()).toString());
+                    overLayDetail(holder);
                 }
             }
         });
@@ -257,5 +264,12 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
             image.setImageDrawable(Drawable.createFromPath(file.getPath()));
             description.setText(file.getName().toString());
         }
+    }
+
+    public void overLayDetail(ViewHolder holder) {
+        DetailFragment detailFragment = new DetailFragment(files.get(holder.getAdapterPosition()).toString());
+        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.container, detailFragment).addToBackStack(null).commit();
     }
 }
