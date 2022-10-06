@@ -19,11 +19,19 @@ public class RecommendFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // YES
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ssid", recommendSSID);
+
+                        ChangeWifiFragment changeWifiFragment = new ChangeWifiFragment();
+                        changeWifiFragment.setArguments(bundle);
+
+                        changeWifiFragment.show(getParentFragmentManager(), "recommend Popup");
                     }
                 })
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        // NO
 
                     }
                 });
