@@ -13,6 +13,8 @@ import android.util.Log;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.viewModel.WiFiViewModel;
 
+import java.io.File;
+
 public class DeleteFragment extends DialogFragment {
     private WiFiViewModel viewModel;
     private WiFi wifi;
@@ -33,6 +35,17 @@ public class DeleteFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // YES
                         new Thread(() -> viewModel.delete(wifi)).start();
+                        String path = getActivity().getExternalFilesDir(null).toString()+"/"+wifi.getSsid();
+                        File parentDir = new File(path);
+                        File[] children = parentDir.listFiles();
+                        if (parentDir.exists()) {
+                            for (File child : children) {
+                                Log.d("delete", child.toString());
+                                child.delete();
+                            }
+                            Log.d("delete", parentDir.toString());
+                            parentDir.delete();
+                        }
                     }
                 })
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
