@@ -17,6 +17,7 @@ import com.team7.nar.model.WiFiDao;
 import com.team7.nar.model.WiFiRoomDatabase;
 import com.team7.nar.model.WifiScanner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class WiFiViewModel extends AndroidViewModel {
     WiFiRoomDatabase db;
 
     public LiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
+    public MutableLiveData<List<File>> screenshots = new MutableLiveData<List<File>>();
+    public MutableLiveData<File> parentPath = new MutableLiveData<File>();
     public MutableLiveData<String> recommendedWiFi = new MutableLiveData<String>();
     private MutableLiveData<WiFi> currentWifi; // Current WiFi ssid
     private MutableLiveData<WiFi> scanResultWifi;  // Current WiFi for Scan
@@ -38,6 +41,7 @@ public class WiFiViewModel extends AndroidViewModel {
         list.add(new WiFi());
         return list;
     }
+
 
     public LiveData<List<WiFi>> getAllWifi(){
         //allWifi.postValue(getAllWifiFromDB());

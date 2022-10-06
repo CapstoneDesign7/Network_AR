@@ -13,19 +13,28 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.team7.nar.databinding.ActivityMainBinding;
 import com.team7.nar.view.MainFragment;
+import com.team7.nar.view.PhotoFragment;
 import com.team7.nar.view.WifiListFragment;
 import com.team7.nar.viewModel.WiFiViewModel;
 import com.unity3d.player.UnityPlayer;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -34,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public FragmentManager mFragmentManager;
     public MainFragment mainFragment;
     public WifiListFragment wifiListFragment;
+    public PhotoFragment photoFragment;
     private FragmentTransaction transaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         mainFragment = new MainFragment();
         wifiListFragment = new WifiListFragment();
+        photoFragment = new PhotoFragment();
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(WiFiViewModel.class);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -161,4 +172,14 @@ public class MainActivity extends AppCompatActivity {
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.container, wifiListFragment).addToBackStack(null).commit(); ;
     }
+    public void overlayPhoto() {
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.container, photoFragment).addToBackStack(null).commit(); ;
+    }
+
+
+
+
+
+
 }

@@ -21,6 +21,7 @@ import com.team7.nar.model.WiFiRoomDatabase;
 import com.team7.nar.model.WifiAdapter;
 import com.team7.nar.viewModel.WiFiViewModel;
 
+import java.io.File;
 import java.util.List;
 
 public class WifiListFragment extends Fragment implements FragmentAdapter {
@@ -45,7 +46,13 @@ public class WifiListFragment extends Fragment implements FragmentAdapter {
             public void onChanged(List<WiFi> wiFis) {
                 recyclerView.setAdapter(
 //                        new WifiAdapter(mycontext, wiFis, viewModel, WifiListFragment.this)
-                          new WifiAdapter(mycontext, wiFis, WifiListFragment.this)
+                          new WifiAdapter(mycontext, wiFis, WifiListFragment.this, new WifiAdapter.fragmentListner() {
+                              @Override
+                              public void listen(List<File> files,File dir) {
+                                  viewModel.screenshots.setValue(files);
+                                  viewModel.parentPath.setValue(dir);
+                              }
+                          })
                 );
             }
         });
