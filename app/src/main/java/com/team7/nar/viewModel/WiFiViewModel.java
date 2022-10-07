@@ -27,7 +27,6 @@ public class WiFiViewModel extends AndroidViewModel {
     WifiManager wifiManager;
     WiFi tmpWifi;
     WiFiRoomDatabase db;
-
     public LiveData<List<WiFi>> allWifi = new MutableLiveData<List<WiFi>>(dummuList());
     public MutableLiveData<List<File>> screenshots = new MutableLiveData<List<File>>();
     public MutableLiveData<File> parentPath = new MutableLiveData<File>();
@@ -84,7 +83,7 @@ public class WiFiViewModel extends AndroidViewModel {
         return scanResultWifi;
     }
 
-    public void setRecommend(WiFi curWifi){
+    public int setRecommend(WiFi curWifi){
         wifiManager = (WifiManager) getApplication().getSystemService(Context.WIFI_SERVICE);
         List<ScanResult> results = wifiManager.getScanResults();
         String tmp_ssid = "";
@@ -101,8 +100,10 @@ public class WiFiViewModel extends AndroidViewModel {
             // Except Current WiFi
             if (!tmp_ssid.equals(curWifi.getSsid())) {
                 recommendedWiFi.setValue(tmp_ssid);
+                return 1;
             }
         }
+        return 0;
     }
 
 
@@ -117,6 +118,8 @@ public class WiFiViewModel extends AndroidViewModel {
         avgWifi = wifiScanner.scan(context);
 
         scanResultWifi.postValue(avgWifi);
+
+        currentWifi.postValue(wifiScanner.getCurrentWifi(context));
     }
 
     public void save(){

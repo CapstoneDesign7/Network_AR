@@ -51,7 +51,7 @@ public class DetailFragment extends Fragment implements FragmentAdapter {
         String second = array[9].substring(12, 14);
 
         Log.d("regex", year+"년"+month+"월"+day+"일"+hour+"시"+minute+"분"+second+"초");
-        String description = year+"."+month+"."+day+"  "+hour+":"+minute+":"+second;
+        String description = array[8]+"\n"+year+"."+month+"."+day+"  "+hour+":"+minute+":"+second;
         binding.fileDescription.setText(description);
     }
 

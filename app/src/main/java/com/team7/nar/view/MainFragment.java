@@ -36,6 +36,7 @@ import com.unity3d.player.UnityPlayer;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +53,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     EmptyResultFragment emptyResultFragment;
     WifiReceiver receiver = new WifiReceiver(this);
     protected UnityPlayer unityPlayer;
+    private HashMap<String, Integer> recommendFlag = new HashMap<String, Integer>();
     public MainFragment() {
 
     }
@@ -139,8 +141,16 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 new Observer<WiFi>() {
                     @Override
                     public void onChanged(WiFi wiFi) {
-                        if ( wiFi != null){
-                            viewModel.setRecommend(wiFi);
+                        if (wiFi != null){
+                            if (!recommendFlag.containsKey(wiFi.getSsid())){
+                                int flag = viewModel.setRecommend(wiFi);
+                                recommendFlag.put(wiFi.getSsid(), flag);
+                            }else{
+                                if (recommendFlag.get(wiFi.getSsid()) == 0) {
+                                    int flag = viewModel.setRecommend(wiFi);
+                                    recommendFlag.put(wiFi.getSsid(), flag);
+                                }
+                            }
                         }
                         //showScanResult(wiFi);
                     }
@@ -156,19 +166,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
             }
         });
-
-//        binding.PhotoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getContext(), "photobutton clicked", Toast.LENGTH_LONG).show();
-//                String path = getActivity().getExternalFilesDir(null).toString();
-//                File directory = new File(path);
-//                viewModel.screenshots.setValue(Arrays.asList(directory.listFiles()));
-//                viewModel.parentPath.setValue(directory);
-//                ((MainActivity) getActivity()).overlayPhoto();
-//                //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
-//            }
-//        });
 
         binding.scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +183,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
                 {
                     Log.d("Files", "FileName:" + files[i].getName());
                 }
+                Log.d("Hashes", recommendFlag.toString());
             }
         });
 
@@ -216,7 +214,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     public void onStart() {
         Log.d("lifecycle","onstart");
         super.onStart();
-
     }
 
     @Override
