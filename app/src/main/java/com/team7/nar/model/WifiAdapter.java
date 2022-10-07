@@ -67,13 +67,13 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder>{
             }
         });
 
-        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                updatePopup(wifi);
-                return false;
-            }
-        });
+//        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                updatePopup(wifi);
+//                return false;
+//            }
+//        });
 
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
