@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:text="default string"
+            android:fontFamily="@font/tway_air"
             android:layout_gravity="bottom"
             android:textColor="@color/white"
             android:background="@color/black"
