@@ -58,6 +58,7 @@
         android:drawableStart="@drawable/ic_baseline_wifi_24"
         android:paddingHorizontal="20dp"
         android:text="Scan"
+        android:fontFamily="@font/tway_air"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
 

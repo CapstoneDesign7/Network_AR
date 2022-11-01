@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -46,6 +48,13 @@ public class PhotoFragment extends Fragment implements FragmentAdapter {
         binding = ScreenshotRecyclerviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mycontext = container.getContext();
+
+        View toolbar = inflater.inflate(R.layout.screenshot_recyclerview, container, false);
+
+        Toolbar myToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+
         return view;
     }
 

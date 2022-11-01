@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Disconnected"
+        android:fontFamily="@font/tway_air"
         android:textSize="30sp"
         android:textStyle="bold"
         android:background="@drawable/disconnected_radius"

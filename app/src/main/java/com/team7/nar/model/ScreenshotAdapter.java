@@ -185,8 +185,8 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
                 {
                     // when action mode is not enable
                     // display toast
-                    Toast.makeText(context.getApplicationContext(), "You Clicked"+files.get(holder.getAdapterPosition()),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context.getApplicationContext(), "You Clicked"+files.get(holder.getAdapterPosition()),
+//                            Toast.LENGTH_SHORT).show();
                     Log.d("overLay", files.get(holder.getAdapterPosition()).toString());
                     overLayDetail(holder);
                 }

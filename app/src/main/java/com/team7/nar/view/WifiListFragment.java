@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -15,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.team7.nar.FragmentAdapter;
+import com.team7.nar.R;
 import com.team7.nar.databinding.WifiRecyclerviewBinding;
 import com.team7.nar.model.WiFi;
 import com.team7.nar.model.WiFiRoomDatabase;
@@ -34,6 +39,15 @@ public class WifiListFragment extends Fragment implements FragmentAdapter {
         binding = WifiRecyclerviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mycontext = container.getContext();
+        View toolbar = inflater.inflate(R.layout.wifi_recyclerview, container, false);
+
+        Toolbar myToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+
+        WindowInsetsController decorView = ((AppCompatActivity)getActivity()).getWindow().getInsetsController();
+        decorView.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+
         return view;
     }
 

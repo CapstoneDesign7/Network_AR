@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         ImageView intro = (ImageView) findViewById(R.id.intro);
-        Glide.with(this).load(R.drawable.title).into(intro);
+        Glide.with(this).load(R.drawable.nar).into(intro);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
