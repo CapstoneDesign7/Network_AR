@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,11 +50,13 @@ public class PhotoFragment extends Fragment implements FragmentAdapter {
         View view = binding.getRoot();
         mycontext = container.getContext();
 
-        View toolbar = inflater.inflate(R.layout.screenshot_recyclerview, container, false);
-
-        Toolbar myToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
-
-        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+//        View toolbar = inflater.inflate(R.layout.screenshot_recyclerview, container, false);
+//
+//        Toolbar myToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
+//
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+//
+//        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         return view;
     }

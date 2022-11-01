@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,8 +50,6 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     FrameLayout frameLayoutForUnity;
     DisconnectedFragment disconnectedFragment;
     ConnectedFragment connectedFragment;
-    ScanResultFragment scanResultFragment;
-    EmptyResultFragment emptyResultFragment;
     WifiReceiver receiver = new WifiReceiver(this);
     protected UnityPlayer unityPlayer;
     private HashMap<String, Integer> recommendFlag = new HashMap<String, Integer>();
@@ -81,6 +80,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Log.d("lifecycle","onCreateView");
         unityPlayer = ((MainActivity) getActivity()).mUnityPlayer;
         int glesMode = unityPlayer.getSettings().getInt("gles_mode", 1);
@@ -162,7 +162,9 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
             public void onClick(View view) {
 //                Toast.makeText(getContext(), "List clicked", Toast.LENGTH_LONG).show();
                 new Thread(() -> viewModel.getAllWifi()).start();
+//                requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 ((MainActivity) getActivity()).overlayList();
+
                 //Navigation.findNavController(view).navigate(MainFragmentDirections.actionMainFragmentToWiFiList());
             }
         });
@@ -201,6 +203,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
     public void onResume() {
         Log.d("lifecycle","onResume");
         super.onResume();
+//        requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.frameLayoutForUnity.addView(unityPlayer.getView(), FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         unityPlayer.requestFocus();
         unityPlayer.windowFocusChanged(true);

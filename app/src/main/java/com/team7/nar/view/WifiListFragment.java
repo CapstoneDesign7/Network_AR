@@ -42,11 +42,11 @@ public class WifiListFragment extends Fragment implements FragmentAdapter {
         View toolbar = inflater.inflate(R.layout.wifi_recyclerview, container, false);
 
         Toolbar myToolbar = (Toolbar) toolbar.findViewById(R.id.toolbar);
-
         ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
 
-        WindowInsetsController decorView = ((AppCompatActivity)getActivity()).getWindow().getInsetsController();
-        decorView.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+//        View decorView = requireActivity().getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(view.SYSTEM_UI_FLAG_FULLSCREEN);
+
 
         return view;
     }
