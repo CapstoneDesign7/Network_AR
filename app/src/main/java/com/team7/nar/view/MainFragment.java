@@ -192,7 +192,7 @@ public class MainFragment extends Fragment implements WifiBroadcastListener {
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(getContext(), "Save clicked", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Picture saved", Toast.LENGTH_LONG).show();
                 new Thread(() -> viewModel.save()).start();
                 unityPlayer.UnitySendMessage("Spawner","ScreenShot","");
             }
